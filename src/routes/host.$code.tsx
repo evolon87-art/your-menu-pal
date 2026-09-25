@@ -122,10 +122,14 @@ function HostScreen() {
 
   return (
     <main className="min-h-screen bg-background px-4 py-6 sm:px-8">
-      {countdown}
       <div className="mx-auto w-full max-w-[1400px]">
         <div className="rounded-[var(--radius)] bg-panel p-5 shadow-[var(--shadow-panel)] sm:p-10">
-          {waiting && !lobbyOpen ? (
+          <div
+            ref={arenaRef}
+            className={isFullscreen ? "relative flex h-full flex-col justify-center bg-panel" : ""}
+          >
+            {countdown}
+            {waiting && !lobbyOpen ? (
             <section className="flex flex-col items-center py-12 text-center">
               <p className="text-xs font-semibold tracking-[0.35em] text-muted-foreground">
                 2. ADIM — YARIŞMA
@@ -188,8 +192,7 @@ function HostScreen() {
           ) : (
             <section>
               <div
-                ref={arenaRef}
-                className={`-mx-5 sm:-mx-10 ${isFullscreen ? "relative flex h-full flex-col justify-center bg-panel" : ""}`}
+                className={isFullscreen ? "" : "-mx-5 sm:-mx-10"}
               >
                 <TugOfWarArena ropePosition={data.ropePosition} pulse={pulse} />
                 {isFullscreen && (
@@ -219,6 +222,7 @@ function HostScreen() {
               </div>
             </section>
           )}
+          </div>
         </div>
 
         <div className="mt-3 grid gap-3 rounded-[var(--radius)] bg-panel px-4 py-3 shadow-[var(--shadow-panel)] sm:grid-cols-[1fr_auto] sm:items-center">
