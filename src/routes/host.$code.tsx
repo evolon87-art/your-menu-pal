@@ -192,7 +192,7 @@ function HostScreen() {
           ) : (
             <section>
               <div
-                className={isFullscreen ? "" : "-mx-5 sm:-mx-10"}
+                className={isFullscreen ? "" : "-mx-4 sm:-mx-6"}
               >
                 <TugOfWarArena ropePosition={data.ropePosition} pulse={pulse} />
                 {isFullscreen && (
@@ -225,45 +225,35 @@ function HostScreen() {
           </div>
         </div>
 
-        <div className="mt-3 grid gap-3 rounded-[var(--radius)] bg-panel px-4 py-3 shadow-[var(--shadow-panel)] sm:grid-cols-[1fr_auto] sm:items-center">
-          <div className="flex flex-wrap gap-2 text-xs font-semibold text-foreground">
-            {waiting && (
-              <>
-                <StatusChip label="TAKIM 1" player={team1} />
-                <StatusChip label="TAKIM 2" player={team2} />
-              </>
-            )}
+        {!waiting && (
+          <div className="mt-3 grid gap-3 rounded-[var(--radius)] bg-panel px-4 py-3 shadow-[var(--shadow-panel)] sm:grid-cols-[1fr_auto] sm:items-center">
+            <div className="flex flex-wrap gap-2 text-xs font-semibold text-foreground" />
+            <div className="flex flex-wrap gap-2">
+              {data.status === "PLAYING" && <Ctrl onClick={() => act("pause")}>DURAKLAT</Ctrl>}
+              {data.status === "PAUSED" && (
+                <Ctrl onClick={() => act("resume")} primary>
+                  DEVAM ET
+                </Ctrl>
+              )}
+              {(data.status === "PLAYING" || data.status === "PAUSED") && (
+                <>
+                  {!isFullscreen && (
+                    <Ctrl onClick={toggleFullscreen}>TAM EKRAN</Ctrl>
+                  )}
+                  <Ctrl onClick={() => void navigate({ to: "/" })}>ÇIKIŞ</Ctrl>
+                </>
+              )}
+              {data.status === "FINISHED" && (
+                <Ctrl
+                  onClick={() => startWithFullscreen("restart")}
+                  primary
+                >
+                  BAŞLAT
+                </Ctrl>
+              )}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {waiting && lobbyOpen && (
-              <Ctrl onClick={() => startWithFullscreen("start")} primary>
-                BAŞLAT
-              </Ctrl>
-            )}
-            {data.status === "PLAYING" && <Ctrl onClick={() => act("pause")}>DURAKLAT</Ctrl>}
-            {data.status === "PAUSED" && (
-              <Ctrl onClick={() => act("resume")} primary>
-                DEVAM ET
-              </Ctrl>
-            )}
-            {(data.status === "PLAYING" || data.status === "PAUSED") && (
-              <>
-                {!isFullscreen && (
-                  <Ctrl onClick={toggleFullscreen}>TAM EKRAN</Ctrl>
-                )}
-                <Ctrl onClick={() => void navigate({ to: "/" })}>ÇIKIŞ</Ctrl>
-              </>
-            )}
-            {data.status === "FINISHED" && (
-              <Ctrl
-                onClick={() => startWithFullscreen("restart")}
-                primary
-              >
-                BAŞLAT
-              </Ctrl>
-            )}
-          </div>
-        </div>
+        )}
       </div>
     </main>
   );
@@ -292,20 +282,6 @@ function TeamSlot({
   );
 }
 
-function StatusChip({
-  label,
-  player,
-}: {
-  label: string;
-  player?: { name: string; connected: boolean } | undefined;
-}) {
-  return (
-    <span className="rounded-full bg-muted px-2.5 py-0.5">
-      {label}: {player ? player.name : "—"} •{" "}
-      {player ? (player.connected ? "HAZIR" : "BAĞLANTI KESİLDİ") : "BEKLENİYOR"}
-    </span>
-  );
-}
 
 function Ctrl({
   children,
