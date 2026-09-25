@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 import QRCode from "react-qr-code";
@@ -269,7 +270,7 @@ function TeamSlot({
   connected?: boolean | undefined;
 }) {
   return (
-    <div className="rounded-2xl border-2 border-border px-5 py-4 text-left">
+    <div className="rounded-2xl border-2 border-border px-4 py-3 text-left">
       <p
         className={`text-xs font-bold tracking-[0.25em] ${team === 1 ? "text-team1" : "text-team2"}`}
       >
