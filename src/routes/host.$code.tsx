@@ -121,9 +121,9 @@ function HostScreen() {
   const waiting = data.status === "WAITING" || data.status === "READY";
 
   return (
-    <main className="min-h-screen bg-background px-4 py-6 sm:px-8">
+    <main className="min-h-screen bg-background px-4 py-3 sm:px-8">
       <div className="mx-auto w-full max-w-[1400px]">
-        <div className="rounded-[var(--radius)] bg-panel p-5 shadow-[var(--shadow-panel)] sm:p-10">
+        <div className="rounded-[var(--radius)] bg-panel p-4 shadow-[var(--shadow-panel)] sm:p-6">
           <div
             ref={arenaRef}
             className={isFullscreen ? "relative flex h-full flex-col justify-center bg-panel" : ""}
@@ -155,29 +155,29 @@ function HostScreen() {
               </button>
             </section>
           ) : waiting ? (
-            <section className="flex flex-col items-center py-6 text-center">
+            <section className="flex flex-col items-center py-2 text-center">
               <p className="text-xs font-semibold tracking-[0.35em] text-muted-foreground">
                 ODA KODU
               </p>
-              <h1 className="mt-2 text-5xl font-extrabold tracking-[0.2em] text-foreground">
+              <h1 className="mt-1 text-4xl font-extrabold tracking-[0.2em] text-foreground sm:text-5xl">
                 {code}
               </h1>
-              <div className="mt-8 rounded-3xl border-4 border-foreground p-5 text-foreground">
-                <QRCode value={joinUrl} size={220} bgColor="transparent" fgColor="currentColor" />
+              <div className="mt-3 rounded-2xl border-4 border-foreground p-2 text-foreground">
+                <QRCode value={joinUrl} size={140} bgColor="transparent" fgColor="currentColor" />
               </div>
-              <p className="mt-6 text-base font-bold tracking-[0.2em] text-foreground sm:text-lg">
+              <p className="mt-2 text-sm font-bold tracking-[0.2em] text-foreground sm:text-base">
                 TELEFONUNUZLA QR KODU OKUTUN
               </p>
-              <div className="mt-8 grid w-full max-w-2xl gap-4 sm:grid-cols-2">
+              <div className="mt-3 grid w-full max-w-2xl gap-3 sm:grid-cols-2">
                 <TeamSlot team={1} name={team1?.name} connected={team1?.connected} />
                 <TeamSlot team={2} name={team2?.name} connected={team2?.connected} />
               </div>
               {data.players.length === 2 && (
-                <p className="mt-8 text-2xl font-extrabold text-foreground">İKİ OYUNCU HAZIR!</p>
+                <p className="mt-3 text-xl font-extrabold text-foreground">İKİ OYUNCU HAZIR!</p>
               )}
               <button
                 onClick={() => startWithFullscreen("start")}
-                className="mt-8 rounded-2xl bg-foreground px-10 py-5 text-lg font-bold tracking-wide text-background transition-transform hover:scale-[1.01]"
+                className="mt-3 rounded-2xl bg-foreground px-10 py-4 text-lg font-bold tracking-wide text-background transition-transform hover:scale-[1.01]"
               >
                 {data.players.length === 2 ? "OYUNU BAŞLAT" : "OYUNCU BEKLEMEDEN BAŞLAT"}
               </button>
