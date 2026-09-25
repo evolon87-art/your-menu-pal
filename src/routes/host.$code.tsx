@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 import QRCode from "react-qr-code";
@@ -121,9 +122,9 @@ function HostScreen() {
   const waiting = data.status === "WAITING" || data.status === "READY";
 
   return (
-    <main className="min-h-screen bg-background px-4 py-6 sm:px-8">
+    <main className="min-h-screen bg-background px-4 py-3 sm:px-8">
       <div className="mx-auto w-full max-w-[1400px]">
-        <div className="rounded-[var(--radius)] bg-panel p-5 shadow-[var(--shadow-panel)] sm:p-10">
+        <div className="rounded-[var(--radius)] bg-panel p-4 shadow-[var(--shadow-panel)] sm:p-6">
           <div
             ref={arenaRef}
             className={isFullscreen ? "relative flex h-full flex-col justify-center bg-panel" : ""}
@@ -155,29 +156,29 @@ function HostScreen() {
               </button>
             </section>
           ) : waiting ? (
-            <section className="flex flex-col items-center py-6 text-center">
+            <section className="flex flex-col items-center py-2 text-center">
               <p className="text-xs font-semibold tracking-[0.35em] text-muted-foreground">
                 ODA KODU
               </p>
-              <h1 className="mt-2 text-5xl font-extrabold tracking-[0.2em] text-foreground">
+              <h1 className="mt-1 text-4xl font-extrabold tracking-[0.2em] text-foreground sm:text-5xl">
                 {code}
               </h1>
-              <div className="mt-8 rounded-3xl border-4 border-foreground p-5 text-foreground">
-                <QRCode value={joinUrl} size={220} bgColor="transparent" fgColor="currentColor" />
+              <div className="mt-3 rounded-2xl border-4 border-foreground p-2 text-foreground">
+                <QRCode value={joinUrl} size={140} bgColor="transparent" fgColor="currentColor" />
               </div>
-              <p className="mt-6 text-base font-bold tracking-[0.2em] text-foreground sm:text-lg">
+              <p className="mt-2 text-sm font-bold tracking-[0.2em] text-foreground sm:text-base">
                 TELEFONUNUZLA QR KODU OKUTUN
               </p>
-              <div className="mt-8 grid w-full max-w-2xl gap-4 sm:grid-cols-2">
+              <div className="mt-3 grid w-full max-w-2xl gap-3 sm:grid-cols-2">
                 <TeamSlot team={1} name={team1?.name} connected={team1?.connected} />
                 <TeamSlot team={2} name={team2?.name} connected={team2?.connected} />
               </div>
               {data.players.length === 2 && (
-                <p className="mt-8 text-2xl font-extrabold text-foreground">İKİ OYUNCU HAZIR!</p>
+                <p className="mt-3 text-xl font-extrabold text-foreground">İKİ OYUNCU HAZIR!</p>
               )}
               <button
                 onClick={() => startWithFullscreen("start")}
-                className="mt-8 rounded-2xl bg-foreground px-10 py-5 text-lg font-bold tracking-wide text-background transition-transform hover:scale-[1.01]"
+                className="mt-3 rounded-2xl bg-foreground px-10 py-4 text-lg font-bold tracking-wide text-background transition-transform hover:scale-[1.01]"
               >
                 {data.players.length === 2 ? "OYUNU BAŞLAT" : "OYUNCU BEKLEMEDEN BAŞLAT"}
               </button>
@@ -192,7 +193,7 @@ function HostScreen() {
           ) : (
             <section>
               <div
-                className={isFullscreen ? "" : "-mx-5 sm:-mx-10"}
+                className={isFullscreen ? "" : "-mx-4 sm:-mx-6"}
               >
                 <TugOfWarArena ropePosition={data.ropePosition} pulse={pulse} />
                 {isFullscreen && (
@@ -225,45 +226,35 @@ function HostScreen() {
           </div>
         </div>
 
-        <div className="mt-3 grid gap-3 rounded-[var(--radius)] bg-panel px-4 py-3 shadow-[var(--shadow-panel)] sm:grid-cols-[1fr_auto] sm:items-center">
-          <div className="flex flex-wrap gap-2 text-xs font-semibold text-foreground">
-            {waiting && (
-              <>
-                <StatusChip label="TAKIM 1" player={team1} />
-                <StatusChip label="TAKIM 2" player={team2} />
-              </>
-            )}
+        {!waiting && (
+          <div className="mt-3 grid gap-3 rounded-[var(--radius)] bg-panel px-4 py-3 shadow-[var(--shadow-panel)] sm:grid-cols-[1fr_auto] sm:items-center">
+            <div className="flex flex-wrap gap-2 text-xs font-semibold text-foreground" />
+            <div className="flex flex-wrap gap-2">
+              {data.status === "PLAYING" && <Ctrl onClick={() => act("pause")}>DURAKLAT</Ctrl>}
+              {data.status === "PAUSED" && (
+                <Ctrl onClick={() => act("resume")} primary>
+                  DEVAM ET
+                </Ctrl>
+              )}
+              {(data.status === "PLAYING" || data.status === "PAUSED") && (
+                <>
+                  {!isFullscreen && (
+                    <Ctrl onClick={toggleFullscreen}>TAM EKRAN</Ctrl>
+                  )}
+                  <Ctrl onClick={() => void navigate({ to: "/" })}>ÇIKIŞ</Ctrl>
+                </>
+              )}
+              {data.status === "FINISHED" && (
+                <Ctrl
+                  onClick={() => startWithFullscreen("restart")}
+                  primary
+                >
+                  BAŞLAT
+                </Ctrl>
+              )}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {waiting && lobbyOpen && (
-              <Ctrl onClick={() => startWithFullscreen("start")} primary>
-                BAŞLAT
-              </Ctrl>
-            )}
-            {data.status === "PLAYING" && <Ctrl onClick={() => act("pause")}>DURAKLAT</Ctrl>}
-            {data.status === "PAUSED" && (
-              <Ctrl onClick={() => act("resume")} primary>
-                DEVAM ET
-              </Ctrl>
-            )}
-            {(data.status === "PLAYING" || data.status === "PAUSED") && (
-              <>
-                {!isFullscreen && (
-                  <Ctrl onClick={toggleFullscreen}>TAM EKRAN</Ctrl>
-                )}
-                <Ctrl onClick={() => void navigate({ to: "/" })}>ÇIKIŞ</Ctrl>
-              </>
-            )}
-            {data.status === "FINISHED" && (
-              <Ctrl
-                onClick={() => startWithFullscreen("restart")}
-                primary
-              >
-                BAŞLAT
-              </Ctrl>
-            )}
-          </div>
-        </div>
+        )}
       </div>
     </main>
   );
@@ -279,7 +270,7 @@ function TeamSlot({
   connected?: boolean | undefined;
 }) {
   return (
-    <div className="rounded-2xl border-2 border-border px-5 py-4 text-left">
+    <div className="rounded-2xl border-2 border-border px-4 py-3 text-left">
       <p
         className={`text-xs font-bold tracking-[0.25em] ${team === 1 ? "text-team1" : "text-team2"}`}
       >
@@ -292,20 +283,6 @@ function TeamSlot({
   );
 }
 
-function StatusChip({
-  label,
-  player,
-}: {
-  label: string;
-  player?: { name: string; connected: boolean } | undefined;
-}) {
-  return (
-    <span className="rounded-full bg-muted px-2.5 py-0.5">
-      {label}: {player ? player.name : "—"} •{" "}
-      {player ? (player.connected ? "HAZIR" : "BAĞLANTI KESİLDİ") : "BEKLENİYOR"}
-    </span>
-  );
-}
 
 function Ctrl({
   children,
