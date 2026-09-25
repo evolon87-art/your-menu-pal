@@ -240,9 +240,9 @@ function HostScreen() {
             )}
             {(data.status === "PLAYING" || data.status === "PAUSED") && (
               <>
-                <Ctrl onClick={toggleFullscreen}>
-                  {isFullscreen ? "TAM EKRANDAN ÇIK" : "TAM EKRAN"}
-                </Ctrl>
+                {!isFullscreen && (
+                  <Ctrl onClick={toggleFullscreen}>TAM EKRAN</Ctrl>
+                )}
                 <Ctrl onClick={() => void navigate({ to: "/" })}>ÇIKIŞ</Ctrl>
               </>
             )}
