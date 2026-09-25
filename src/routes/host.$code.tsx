@@ -223,8 +223,12 @@ function HostScreen() {
 
         <div className="mt-3 grid gap-3 rounded-[var(--radius)] bg-panel px-4 py-3 shadow-[var(--shadow-panel)] sm:grid-cols-[1fr_auto] sm:items-center">
           <div className="flex flex-wrap gap-2 text-xs font-semibold text-foreground">
-            <StatusChip label="TAKIM 1" player={team1} />
-            <StatusChip label="TAKIM 2" player={team2} />
+            {waiting && (
+              <>
+                <StatusChip label="TAKIM 1" player={team1} />
+                <StatusChip label="TAKIM 2" player={team2} />
+              </>
+            )}
           </div>
           <div className="flex flex-wrap gap-2">
             {waiting && lobbyOpen && (
